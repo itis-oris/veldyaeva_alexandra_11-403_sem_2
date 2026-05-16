@@ -7,7 +7,7 @@ spring:
   mvc:
     hiddenmethod:
       filter:
-        enabled: true   # нужен для _method=DELETE в формах
+        enabled: true
   jackson:
     serialization:
       write-dates-as-timestamps: false

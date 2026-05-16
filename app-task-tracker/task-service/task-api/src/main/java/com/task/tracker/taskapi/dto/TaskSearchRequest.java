@@ -9,28 +9,35 @@ import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
-@Schema(description = "Search/filter request for tasks")
+@Schema(description = "Запрос поиска и фильтрации задач")
 public record TaskSearchRequest(
 
-        @Schema(description = "Filter by task status")
+        @Schema(description = "Фильтр по статусу задачи")
         TaskStatus status,
 
-        @Schema(description = "Filter by priority")
+        @Schema(description = "Фильтр по приоритету задачи")
         Priority priority,
 
-        @NotNull(message = "User ID must not be null")
-        @Schema(description = "Filter by account (user) ID", requiredMode = Schema.RequiredMode.REQUIRED)
+        @NotNull(message = "ID пользователя не должен быть null")
+        @Schema(
+                description = "Фильтр по ID аккаунта (пользователя)",
+                requiredMode = Schema.RequiredMode.REQUIRED
+        )
         UUID userId,
 
-        @Schema(description = "Filter by exact due date")
+        @Schema(description = "Фильтр по точной дате выполнения")
         Instant dueDate,
 
-        @Schema(description = "Fields to sort by: status, priority, createdAt, dueDate, tagName",
-                example = "[\"priority\", \"dueDate\"]")
+        @Schema(
+                description = "Поля для сортировки: status, priority, createdAt, dueDate, tagName",
+                example = "[\"priority\", \"dueDate\"]"
+        )
         List<String> sortBy,
 
-        @Schema(description = "Filter by one tag name",
-                example = "[\"work\", \"school\"]")
+        @Schema(
+                description = "Фильтр по имени тега",
+                example = "work"
+        )
         String tagName
 
 ) {}

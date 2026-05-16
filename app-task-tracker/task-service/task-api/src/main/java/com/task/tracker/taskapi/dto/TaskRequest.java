@@ -11,36 +11,36 @@ import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
 
-@Schema(description = "Request DTO for creating or updating a task")
+@Schema(description = "DTO запроса для создания или обновления задачи")
 public record TaskRequest(
 
-        @Schema(description = "Task ID — null when creating, required when updating")
+        @Schema(description = "ID задачи — null при создании, обязателен при обновлении")
         UUID id,
 
-        @NotBlank(message = "Title must not be blank")
-        @Size(max = 255, message = "Title must not exceed 255 characters")
-        @Schema(description = "Task title", example = "Write unit tests")
+        @NotBlank(message = "Заголовок не должен быть пустым")
+        @Size(max = 255, message = "Заголовок не должен превышать 255 символов")
+        @Schema(description = "Заголовок задачи", example = "Написать unit-тесты")
         String title,
 
-        @Size(max = 2000, message = "Description must not exceed 2000 characters")
-        @Schema(description = "Task description", example = "Cover service layer with JUnit 5 tests")
+        @Size(max = 2000, message = "Описание не должно превышать 2000 символов")
+        @Schema(description = "Описание задачи", example = "Покрыть сервисный слой тестами JUnit 5")
         String description,
 
-        @Schema(description = "Task status")
+        @Schema(description = "Статус задачи", example = "IN_PROGRESS")
         TaskStatus status,
 
-        @NotNull(message = "Priority must not be null")
-        @Schema(description = "Task priority")
+        @NotNull(message = "Приоритет не должен быть null")
+        @Schema(description = "Приоритет задачи", example = "HIGH")
         Priority priority,
 
-        @NotNull(message = "Account ID must not be null")
-        @Schema(description = "Account (user) ID")
+        @NotNull(message = "ID аккаунта не должен быть null")
+        @Schema(description = "ID аккаунта (пользователя)")
         UUID accountId,
 
-        @Schema(description = "Task due date", example = "2026-12-31T23:59:00Z")
+        @Schema(description = "Дата выполнения задачи", example = "2026-12-31T23:59:00Z")
         Instant dueDate,
 
-        @Schema(description = "Set of tag IDs to associate with the task")
+        @Schema(description = "Набор ID тегов, связанных с задачей")
         Set<UUID> tagIds
 
 ) {}

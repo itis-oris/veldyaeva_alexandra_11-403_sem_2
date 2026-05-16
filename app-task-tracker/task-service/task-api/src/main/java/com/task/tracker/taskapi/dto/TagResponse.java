@@ -4,17 +4,18 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.UUID;
 
-@Schema(description = "Tag information")
+@Schema(description = "Информация о теге")
 public record TagResponse(
+
         UUID id,
 
-        @Schema(description = "Tag name", example = "urgent")
+        @Schema(description = "Название тега", example = "срочно")
         String name,
 
-        @Schema(description = "Tag color in hex format", example = "#FF5733")
+        @Schema(description = "Цвет тега в hex-формате", example = "#FF5733")
         String color,
 
-        @Schema(description = "Tag description")
+        @Schema(description = "Описание тега")
         String description
 
 ) {}

@@ -1,7 +1,6 @@
 package com.task.tracker.notificationimpl.service;
 
 import com.task.tracker.commonlib.dto.AccountLevelUpEvent;
-import com.task.tracker.commonlib.dto.AccountStatus;
 import com.task.tracker.notificationapi.dto.MessageStatus;
 import com.task.tracker.notificationimpl.emailClient.EmailClient;
 import com.task.tracker.notificationimpl.entity.AccountMessage;

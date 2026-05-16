@@ -35,10 +35,6 @@
             <span class="fe" th:if="${#fields.hasErrors('rawPassword')}" th:errors="*{rawPassword}"></span>
         </div>
 
-        <div class="fg">
-            <label>Дата рождения <span class="muted">(необязательно)</span></label>
-            <input type="date" th:field="*{birthday}" class="fi"/>
-        </div>
 
         <button type="submit" class="btn btn--p btn--full">Зарегистрироваться</button>
     </form>

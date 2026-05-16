@@ -8,28 +8,30 @@ import jakarta.validation.constraints.Size;
 
 import java.util.UUID;
 
-@Schema(description = "Request DTO for creating or updating a tag")
+@Schema(description = "DTO запроса для создания или обновления тега")
 public record TagRequest(
 
-        @Schema(description = "Tag ID — null for create, required for update")
+        @Schema(description = "ID тега — null при создании, обязателен при обновлении")
         UUID id,
 
-        @NotBlank(message = "Tag name must not be blank")
-        @Size(max = 100, message = "Tag name must not exceed 100 characters")
-        @Schema(description = "Tag name", example = "urgent")
+        @NotBlank(message = "Название тега не должно быть пустым")
+        @Size(max = 100, message = "Название тега не должно превышать 100 символов")
+        @Schema(description = "Название тега", example = "срочно")
         String name,
 
-        @Size(max = 500, message = "Description must not exceed 500 characters")
-        @Schema(description = "Tag description", example = "High priority tasks")
+        @Size(max = 500, message = "Описание не должно превышать 500 символов")
+        @Schema(description = "Описание тега", example = "Задачи высокого приоритета")
         String description,
 
-        @Pattern(regexp = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
-                message = "Color must be a valid hex code, e.g. #FF5733")
-        @Schema(description = "Tag color in hex format", example = "#FF5733")
+        @Pattern(
+                regexp = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$",
+                message = "Цвет должен быть в hex-формате, например #FF5733"
+        )
+        @Schema(description = "Цвет тега в hex-формате", example = "#FF5733")
         String color,
 
-        @NotNull(message = "Account ID must not be null")
-        @Schema(description = "Account (user) ID")
+        @NotNull(message = "ID аккаунта не должен быть null")
+        @Schema(description = "ID аккаунта (пользователя)")
         UUID accountId
 
 ) {}

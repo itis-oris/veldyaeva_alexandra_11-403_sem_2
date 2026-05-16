@@ -15,8 +15,10 @@ import com.task.tracker.commonlib.dto.SignUpEvent;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,6 +44,13 @@ public class AuthService {
 
         log.info("Account login: {}", account.getId());
 
+        String tokenHash = DigestUtils.sha256Hex(couple.refreshToken());
+        RefreshToken refreshToken = RefreshToken.builder()
+                .accountId(account.getId())
+                .createdAt(Instant.now())
+                .build();
+
+        jwtRefreshTokenProvider.save(tokenHash, refreshToken);
         return couple;
     }
 

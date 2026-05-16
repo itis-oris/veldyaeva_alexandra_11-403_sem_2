@@ -2,7 +2,6 @@ package com.task.tracker.notificationimpl.kafka.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.task.tracker.commonlib.dto.AccountLevelUpEvent;
-import com.task.tracker.commonlib.dto.ReminderCommand;
 import com.task.tracker.notificationimpl.emailClient.EmailClient;
 import com.task.tracker.notificationimpl.entity.AccountMessage;
 import com.task.tracker.notificationimpl.service.AccountMessageService;

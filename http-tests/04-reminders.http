@@ -1,0 +1,48 @@
+### 1. создать напоминание для задачи
+POST {{task_url}}/api/reminders
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "taskId": "{{task_id}}",
+  "reminderDate": "2026-07-07T09:00:00Z"
+}
+
+### 2. создать напоминание дата в прошлом (400)
+POST {{task_url}}/api/reminders
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "taskId": "{{task_id}}",
+  "reminderDate": "2020-01-01T00:00:00Z"
+}
+
+### 3. создать напоминание без taskId (400)
+POST {{task_url}}/api/reminders
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "reminderDate": "2026-12-01T09:00:00Z"
+}
+
+### 4. создать напоминание — несуществующая задача (404)
+POST {{task_url}}/api/reminders
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "taskId": "00000000-0000-0000-0000-000000000000",
+  "reminderDate": "2026-12-01T09:00:00Z"
+}
+
+### 5. напоминание на завтра (самый близкий срок)
+POST {{task_url}}/api/reminders
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "taskId": "{{task_id}}",
+  "reminderDate": "2026-05-16T08:00:00Z"
+}

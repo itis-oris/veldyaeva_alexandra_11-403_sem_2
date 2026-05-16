@@ -1,4 +1,7 @@
 databaseChangeLog:
+  - include:
+      file: db/v1/DDL/20260516-create-ai-request-log.yml
+      relativeToChangelogFile: false
 
 
 

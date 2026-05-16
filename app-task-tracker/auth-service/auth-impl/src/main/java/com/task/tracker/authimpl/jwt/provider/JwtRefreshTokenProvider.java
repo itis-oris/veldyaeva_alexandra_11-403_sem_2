@@ -25,6 +25,9 @@ public class JwtRefreshTokenProvider {
     private final JwtTokenProperties jwtTokenProperties;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    public void save(String tokenHash, RefreshToken refreshToken) {
+        refreshTokenRepository.save(tokenHash, refreshToken);
+    }
     public String generateRefreshToken(String subject) {
 
 

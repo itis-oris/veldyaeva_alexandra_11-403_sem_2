@@ -1,0 +1,109 @@
+### 1. создать тег
+POST {{task_url}}/api/tags
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "work",
+  "description": "Рабочие задачи",
+  "color": "#3b82f6",
+  "accountId": "{{account_id}}"
+}
+
+### 2. создать тег
+POST {{task_url}}/api/tags
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "study",
+  "description": "Учебные задачи",
+  "color": "#10b981",
+  "accountId": "{{account_id}}"
+}
+
+### 3. создать тег = personal
+POST {{task_url}}/api/tags
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "personal",
+  "description": "Личные дела",
+  "color": "#f59e0b",
+  "accountId": "{{account_id}}"
+}
+
+### 4. создать тег пустое имя (400)
+POST {{task_url}}/api/tags
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "",
+  "color": "#ff0000",
+  "accountId": "{{account_id}}"
+}
+
+### 5. создать тег неверный цвет (400)
+POST {{task_url}}/api/tags
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "urgent",
+  "color": "red",
+  "accountId": "{{account_id}}"
+}
+
+### 6. создать дубликат тега (409)
+POST {{task_url}}/api/tags
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "work",
+  "description": "Рабочие задачи",
+  "color": "#3b82f6",
+  "accountId": "{{account_id}}"
+}
+
+### 7. получить все теги пользователя
+GET {{task_url}}/api/tags/account/{{account_id}}
+Authorization: Bearer {{token}}
+
+### 8. обновить тег
+PUT {{task_url}}/api/tags
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "id": "{{tag_id}}",
+  "name": "work-updated",
+  "description": "Обновлённое описание",
+  "color": "#6366f1",
+  "accountId": "{{account_id}}"
+}
+
+### 9. удалить тег
+DELETE {{task_url}}/api/tags/{{tag_id}}
+Authorization: Bearer {{token}}
+
+### 10. удалить несуществующий тег (404)
+DELETE {{task_url}}/api/tags/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {{token}}
+
+### 11. создать задачу с тегами
+POST {{task_url}}/api/tasks
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Задача с тегами",
+  "description": "Проверяем привязку тегов",
+  "status": "CREATED",
+  "priority": "HIGH",
+  "accountId": "{{account_id}}",
+  "dueDate": "2026-08-01T12:00:00Z",
+  "tagIds": ["{{tag_id}}"]
+}

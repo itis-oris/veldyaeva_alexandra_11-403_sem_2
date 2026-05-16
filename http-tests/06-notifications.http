@@ -1,0 +1,11 @@
+### 1. получить все уведомления пользователя
+GET {{notification_url}}/api/notifications/{{account_id}}
+
+### 2. получить уведомления несуществующего пользователя
+GET {{notification_url}}/api/notifications/00000000-0000-0000-0000-000000000000
+
+### 3. пометить уведомление как прочитанное
+GET {{notification_url}}/api/notifications/send/{{account_id}}/{{notification_id}}
+
+### 4. пометить несуществующее уведомление (404)
+GET {{notification_url}}/api/notifications/send/{{account_id}}/00000000-0000-0000-0000-000000000000

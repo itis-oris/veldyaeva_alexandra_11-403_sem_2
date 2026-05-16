@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import java.time.Instant;
 import java.util.UUID;
 
-@Table(name = "booking_message")
+@Table(name = "account_message")
 @Data
 @Builder
 @AllArgsConstructor
@@ -23,8 +23,10 @@ public class AccountMessage {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Enumerated(EnumType.STRING)
     private MessageStatus status;
 
+    @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
 
     private String email;

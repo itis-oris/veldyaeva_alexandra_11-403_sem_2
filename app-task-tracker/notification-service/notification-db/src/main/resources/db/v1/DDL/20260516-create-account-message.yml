@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20260516-create-account-message
+      author: adveldyaeva
+      preConditions:
+        - onFail: MARK_RAN
+          not:
+            tableExists:
+              tableName: account_message
+      changes:
+        - createTable:
+            tableName: account_message
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: status
+                  type: VARCHAR(32)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: account_status
+                  type: VARCHAR(32)
+                  constraints:
+                    nullable: true
+
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: send_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: true

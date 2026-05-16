@@ -1,0 +1,40 @@
+### 1. регистрация нового пользователя
+POST {{auth_url}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "{{test_username}}",
+  "rawPassword": "{{test_password}}",
+  "role": "USER",
+  "email": "{{test_email}}",
+  "birthday": "2000-01-01T00:00:00Z"
+}
+
+### 2. регистрация — повторная (409)
+POST {{auth_url}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "{{test_username}}",
+  "rawPassword": "{{test_password}}",
+  "role": "USER",
+  "email": "{{test_email}}",
+  "birthday": "2000-01-01T00:00:00Z"
+}
+
+### 3. логин — успешный
+GET {{auth_url}}/auth/login?username={{test_username}}&password={{test_password}}
+
+### 4. логин — неверный пароль 401
+GET {{auth_url}}/auth/login?username={{test_username}}&password=wrongpassword
+
+### 5. логин — несуществующий пользователь 401
+GET {{auth_url}}/auth/login?username=nobody123&password=anything
+
+### 6. обновление refresh-токена
+POST {{auth_url}}/auth/refresh
+Cookie: refreshToken=eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlcjEyMyIsImlhdCI6MTc3ODg2OTU0N30.5nI3dDnYaCUuZB8WvFVhKHu9n1BkjNlxgs_ejMo_R5VhStUI-mSzxp6iOy6OIyD9TzYzH7iN63HJU4B3eTLmAg
+
+### 7.обновление с невалидным refresh-токеном  401)
+POST {{auth_url}}/auth/refresh
+Cookie: refreshToken=invalid.token.here

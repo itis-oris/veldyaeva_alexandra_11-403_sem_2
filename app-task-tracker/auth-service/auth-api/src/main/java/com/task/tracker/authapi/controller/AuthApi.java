@@ -117,4 +117,22 @@ public interface AuthApi {
             @RequestBody
             SignUpRequest request
     );
+
+    @Operation(
+            summary = "Logout user",
+            description = "Invalidates the current access token and logs out the user"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Successfully logged out"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @Parameter(
+                    description = "JWT access token",
+                    required = true,
+                    example = "Bearer eyJhbGciOiJIUzI1NiJ9..."
+            )
+            @RequestHeader("Authorization") String authorizationHeader);
 }

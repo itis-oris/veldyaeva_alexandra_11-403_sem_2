@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.task.tracker.aiapi.dto.AnthropicResponse;
+import com.task.tracker.aiapi.dto.AiResponse;
 import com.task.tracker.aiimpl.config.properties.GroqProperties;
 import com.task.tracker.aiimpl.exception.AnthropicApiException;
 import com.task.tracker.aiimpl.exception.RateLimitException;
@@ -14,8 +14,6 @@ import okhttp3.*;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 @Component
 @Slf4j
@@ -25,13 +23,13 @@ public class AiClient {
     private static final String ENDPOINT = "/openai/v1/chat/completions";
     private static final MediaType JSON   = MediaType.get("application/json; charset=utf-8");
 
-    private final OkHttpClient   httpClient;
-    private final ObjectMapper   objectMapper;
+    private final OkHttpClient httpClient;
+    private final ObjectMapper objectMapper;
     private final GroqProperties properties;
 
 
-    public AnthropicResponse complete(String systemPrompt, String userPrompt) {
-        String url         = properties.getBaseUrl() + ENDPOINT;
+    public AiResponse complete(String systemPrompt, String userPrompt) {
+        String url = properties.getBaseUrl() + ENDPOINT;
         String requestBody = buildRequestBody(systemPrompt, userPrompt);
 
         log.debug("Groq request | model={} | url={}", properties.getModel(), url);
@@ -67,17 +65,6 @@ public class AiClient {
         }
     }
 
-    /**
-     * {
-     *   "model": "llama-3.3-70b-versatile",
-     *   "messages": [
-     *     { "role": "system",  "content": "..." },
-     *     { "role": "user",    "content": "..." }
-     *   ],
-     *   "max_tokens": 1024,
-     *   "temperature": 0.3
-     * }
-     */
     private String buildRequestBody(String systemPrompt, String userPrompt) {
         try {
             ObjectNode root = objectMapper.createObjectNode();
@@ -103,14 +90,7 @@ public class AiClient {
         }
     }
 
-    /**
-     *
-     * {
-     *   "choices": [{ "message": { "content": "..." } }],
-     *   "usage": { "prompt_tokens": N, "completion_tokens": M }
-     * }
-     */
-    private AnthropicResponse parseResponse(String responseBody) {
+    private AiResponse parseResponse(String responseBody) {
         try {
             JsonNode root = objectMapper.readTree(responseBody);
 
@@ -127,7 +107,7 @@ public class AiClient {
             log.info("Groq OK | model={} | in={} out={}",
                     properties.getModel(), inputTokens, outputTokens);
 
-            return new AnthropicResponse(text, inputTokens, outputTokens);
+            return new AiResponse(text, inputTokens, outputTokens);
 
         } catch (Exception e) {
             log.error("Не удалось распарсить ответ Groq | body={}", responseBody);

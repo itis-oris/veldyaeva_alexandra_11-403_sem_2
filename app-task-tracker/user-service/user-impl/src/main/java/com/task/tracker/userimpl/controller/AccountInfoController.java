@@ -2,6 +2,8 @@ package com.task.tracker.userimpl.controller;
 
 import com.task.tracker.commonlib.dto.AccountUpdateRequest;
 import com.task.tracker.commonlib.dto.AccountUpdateResponse;
+import com.task.tracker.userapi.controller.UserApi;
+import com.task.tracker.userapi.dto.AccountDto;
 import com.task.tracker.userimpl.entity.AccountInfo;
 import com.task.tracker.userimpl.service.AccountInfoService;
 import lombok.RequiredArgsConstructor;
@@ -14,24 +16,23 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/account-info")
 @Slf4j
 @RequiredArgsConstructor
-public class AccountInfoController {
+public class AccountInfoController implements UserApi {
     private final AccountInfoService accountInfoService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AccountInfo> getAccountInfo(@PathVariable UUID id) {
+    @Override
+    public ResponseEntity<AccountDto> getAccountInfo(@PathVariable UUID id) {
         return ResponseEntity.ok(accountInfoService.findAccountInfoById(id));
     }
 
-    @GetMapping("/top")
+    @Override
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<AccountInfo>> getTopAccountInfo() {
+    public ResponseEntity<List<AccountDto>> getTopAccountInfo() {
         return ResponseEntity.ok(accountInfoService.findUsersAboveAverageXp());
     }
 
-    @PostMapping("/update/{id}")
+    @Override
     public ResponseEntity<AccountUpdateResponse> updateAccountInfo(
             @PathVariable UUID id,
             @RequestBody AccountUpdateRequest accountInfo

@@ -44,7 +44,7 @@ public class AiPrioritizationService {
             String systemPrompt = promptBuilder.buildSystemPrompt();
             String userPrompt = promptBuilder.buildUserPrompt(request.tasks());
 
-            AnthropicResponse aiResponse = anthropicClient.complete(systemPrompt, userPrompt);
+            AiResponse aiResponse = anthropicClient.complete(systemPrompt, userPrompt);
 
             long duration = System.currentTimeMillis() - startTime;
 

@@ -26,6 +26,7 @@ public class AccountInfo {
 
     private Integer xp;
 
+    @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
 
     public static AccountInfo create(

@@ -19,8 +19,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller @RequiredArgsConstructor
 public class AuthController {
 
-    private final AuthClient auth;
     private final SessionUtils sessionUtils;
+    private final AuthClient authClient;
 
 
     @GetMapping("/")
@@ -44,7 +44,7 @@ public class AuthController {
             return "auth/login";
         }
         try {
-            String token = auth.login(form);
+            String token = authClient.login(form);
             UserSession us = new UserSession();
             us.setAccessToken(token);
             us.setAccountId(sessionUtils.extractId(token));
@@ -71,7 +71,7 @@ public class AuthController {
             return "auth/register";
         }
         try {
-            auth.register(form);
+            authClient.register(form);
             flash.addFlashAttribute("success", "Аккаунт создан! Войдите.");
             return "redirect:/login";
         } catch (Exception e) {
@@ -82,7 +82,14 @@ public class AuthController {
 
     @PostMapping("/logout")
     public String logout(HttpSession session) {
+        UserSession us = sessionUtils.get(session);
+
+        if (us != null && us.getAccessToken() != null) {
+            authClient.logout(us.bearer());
+        }
+
         sessionUtils.clear(session);
-        return "redirect:/home";
+
+        return "redirect:/login";
     }
 }

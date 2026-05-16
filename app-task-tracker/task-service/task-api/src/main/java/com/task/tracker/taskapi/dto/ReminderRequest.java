@@ -7,17 +7,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 
-@Schema(description = "Request DTO for creating a reminder")
+@Schema(description = "DTO запроса для создания напоминания")
 public record ReminderRequest(
 
-        @NotNull(message = "Task ID must not be null")
-        @Schema(description = "ID of the task to set a reminder for")
+        @NotNull(message = "ID задачи не должен быть null")
+        @Schema(description = "ID задачи, для которой создаётся напоминание")
         UUID taskId,
 
-        @NotNull(message = "Reminder date must not be null")
-        @Future(message = "Reminder date must be in the future")
-        @Schema(description = "When to send the reminder (ISO-8601)", example = "2026-12-01T09:00:00Z")
+        @NotNull(message = "Дата напоминания не должна быть null")
+        @Future(message = "Дата напоминания должна быть в будущем")
+        @Schema(
+                description = "Время отправки напоминания (ISO-8601)",
+                example = "2026-12-01T09:00:00Z"
+        )
         Instant reminderDate
 
 ) {}
-

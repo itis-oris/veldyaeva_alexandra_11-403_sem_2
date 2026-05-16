@@ -59,4 +59,19 @@ public class AuthClient {
             throw new RuntimeException("Пользователь уже существует");
         }
     }
+
+    public void logout(String bearer) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", bearer);
+        try {
+            restTemplate.postForEntity(
+                    serviceProperties.getAuthUrl() + "/auth/logout",
+                    new HttpEntity<>(headers),
+                    Void.class
+            );
+            log.info("Refresh token deleted from Redis");
+        } catch (Exception e) {
+            log.warn("Could not call auth logout: {}", e.getMessage());
+        }
+    }
 }

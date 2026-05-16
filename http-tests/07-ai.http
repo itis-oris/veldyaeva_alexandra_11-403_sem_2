@@ -1,0 +1,75 @@
+### 1. ai-приоритизация задач
+POST {{ai_url}}/api/ai/prioritize
+Content-Type: application/json
+
+{
+  "accountId": "{{account_id}}",
+  "tasks": [
+    {
+      "id": "11111111-1111-1111-1111-111111111111",
+      "title": "Написать отчёт по матстату",
+      "description": "Срочно, преподаватель ждёт",
+      "priority": "HIGH",
+      "status": "CREATED",
+      "dueDate": "2026-05-20T18:00:00Z"
+    },
+    {
+      "id": "22222222-2222-2222-2222-222222222222",
+      "title": "Подготовить презентацию",
+      "description": "Защита через неделю",
+      "priority": "MIDDLE",
+      "status": "CREATED",
+      "dueDate": "2026-05-27T10:00:00Z"
+    },
+    {
+      "id": "33333333-3333-3333-3333-333333333333",
+      "title": "Поднять кафку",
+      "description": null,
+      "priority": "LOW",
+      "status": "CREATED",
+      "dueDate": null
+    }
+  ]
+}
+
+### 2. ai-приоритизация пустой список tasks (400)
+POST {{ai_url}}/api/ai/prioritize
+Content-Type: application/json
+
+{
+  "accountId": "{{account_id}}",
+  "tasks": []
+}
+
+### 3. ai-приоритизация без accountId ( 400)
+POST {{ai_url}}/api/ai/prioritize
+Content-Type: application/json
+
+{
+  "tasks": [
+    {
+      "id": "11111111-1111-1111-1111-111111111111",
+      "title": "Тест",
+      "priority": "LOW",
+      "status": "CREATED"
+    }
+  ]
+}
+
+### 4. ai-приоритизация — одна задача
+POST {{ai_url}}/api/ai/prioritize
+Content-Type: application/json
+
+{
+  "accountId": "{{account_id}}",
+  "tasks": [
+    {
+      "id": "44444444-4444-4444-4444-444444444444",
+      "title": "Единственная задача",
+      "description": "Проверяем работу с одной задачей",
+      "priority": "MIDDLE",
+      "status": "PROCESSING",
+      "dueDate": "2026-06-30T00:00:00Z"
+    }
+  ]
+}

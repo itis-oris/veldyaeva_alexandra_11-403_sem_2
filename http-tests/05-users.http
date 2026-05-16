@@ -1,0 +1,24 @@
+### 1. получить профиль пользователя по id
+GET {{user_url}}/api/account-info/{{account_id}}
+Authorization: Bearer {{token}}
+
+### 2. получить несуществующий профиль ( 404)
+GET {{user_url}}/api/account-info/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {{token}}
+
+### 3. топ пользователей с xp выше среднего
+GET {{user_url}}/api/account-info/top
+Authorization: Bearer {{token}}
+
+### 4. обновить email пользователя
+POST {{user_url}}/api/account-info/update/{{account_id}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "email": "newemail@example.com"
+}
+
+### 5. проверить email обновился
+GET {{user_url}}/api/account-info/{{account_id}}
+Authorization: Bearer {{token}}

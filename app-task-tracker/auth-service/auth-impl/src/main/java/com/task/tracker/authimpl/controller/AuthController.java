@@ -1,5 +1,6 @@
 package com.task.tracker.authimpl.controller;
 
+import com.task.tracker.authapi.controller.AuthApi;
 import com.task.tracker.authapi.dto.LoginResponse;
 import com.task.tracker.authapi.dto.SignUpRequest;
 import com.task.tracker.authapi.dto.SignUpResponse;
@@ -15,32 +16,37 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/auth")
-public class AuthController {
+public class AuthController implements AuthApi {
     private final AuthService authService;
     private static final String REFRESH_TOKEN_COOKIE_NAME = "refreshToken";
 
-
-    @GetMapping("/login")
+    @Override
     public ResponseEntity<LoginResponse> login(@RequestParam String username, @RequestParam String password) {
         log.info("login username: {}", username);
         TokenCouple tokenCouple = authService.login(username, password);
-        System.out.println("tokenCouple: " + tokenCouple);
         return getLoginEntity(tokenCouple);
     }
 
-    @PostMapping("/refresh")
+    @Override
     public ResponseEntity<LoginResponse> refresh(@CookieValue(REFRESH_TOKEN_COOKIE_NAME) String requestRefreshToken) {
         log.info("Refresh token update request");
         TokenCouple tokenCouple = authService.refresh(requestRefreshToken);
         return getLoginEntity(tokenCouple);
     }
 
-    @PostMapping("/register")
+    @Override
     public ResponseEntity<SignUpResponse> register(@RequestBody SignUpRequest registerRequest) {
         log.info("Account register request | username={}", registerRequest.username());
         SignUpResponse response = authService.signUp(registerRequest);
         return ResponseEntity.ok(response);
+    }
+
+    @Override
+    public ResponseEntity<Void> logout(
+            @RequestHeader("Authorization") String accessToken) {
+        log.info("Logout request");
+        authService.logout(accessToken);
+        return ResponseEntity.noContent().build();
     }
 
     private ResponseEntity<LoginResponse> getLoginEntity(TokenCouple tokenCouple) {

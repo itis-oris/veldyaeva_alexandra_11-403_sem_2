@@ -6,8 +6,9 @@ import com.task.tracker.commonlib.dto.AccountLevelUpEvent;
 import com.task.tracker.commonlib.dto.AccountUpdateRequest;
 import com.task.tracker.commonlib.dto.AccountUpdateResponse;
 import com.task.tracker.commonlib.dto.AccountStatus;
+import com.task.tracker.userapi.dto.AccountDto;
 import com.task.tracker.userimpl.entity.AccountInfo;
-import com.task.tracker.userimpl.exception.UserNotFoundException;
+import com.task.tracker.userimpl.exception.AccountInfoNotFoundException;
 import com.task.tracker.userimpl.kafka.port.EventPublisher;
 import com.task.tracker.userimpl.mapper.AccountInfoMapper;
 import com.task.tracker.userimpl.repository.AccountInfoRepository;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,21 +30,24 @@ public class AccountInfoService {
     private final EventPublisher eventPublisher;
     private final ObjectMapper objectMapper;
 
-    public AccountInfo findAccountInfoById(UUID id) {
-        return accountInfoRepository.findById(id).orElseThrow(
-                () -> new UserNotFoundException(id)
-        );
+    public AccountDto findAccountInfoById(UUID id) {
+        return accountInfoMapper.toDto(accountInfoRepository.findById(id).orElseThrow(
+                () -> new AccountInfoNotFoundException(id)
+        ));
     }
 
-    public List<AccountInfo> findUsersAboveAverageXp() {
-        return accountInfoRepository.findUsersAboveAverageXp();
+    public List<AccountDto> findUsersAboveAverageXp() {
+        return accountInfoRepository.findUsersAboveAverageXp()
+                .stream()
+                .map(accountInfoMapper::toDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional
     public void updateXp(UUID id, Integer xp) {
         AccountInfo accountInfo = accountInfoRepository.findAccountInfoById(id)
                 .orElseThrow(
-                        () -> new UserNotFoundException(id)
+                        () -> new AccountInfoNotFoundException(id)
                 );
 
         log.info("Xp updated: [{}]", accountInfo);
@@ -103,7 +108,7 @@ public class AccountInfoService {
     @Transactional
     public AccountUpdateResponse update(UUID id, AccountUpdateRequest accountInfoRequest) {
         AccountInfo accountInfo =  accountInfoRepository.findById(id).orElseThrow(
-                () -> new UserNotFoundException(id)
+                () -> new AccountInfoNotFoundException(id)
         );
 
         if (accountInfoRequest.email() != null) {

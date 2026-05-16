@@ -1,4 +1,10 @@
 databaseChangeLog:
+  - include:
+      file: db/v1/DDL/20260516-create-notification.yml
+      relativeToChangelogFile: false
 
+  - include:
+      file: db/v1/DDL/20260516-create-account-message.yml
+      relativeToChangelogFile: false
 
 

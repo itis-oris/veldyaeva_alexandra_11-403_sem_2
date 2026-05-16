@@ -1,0 +1,110 @@
+### ШАГ 1. регистрация
+POST {{auth_url}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "e2e_user",
+  "rawPassword": "e2epassword123",
+  "role": "USER",
+  "email": "e2e@flowmind.app",
+  "birthday": "1995-05-15T00:00:00Z"
+}
+
+### ШАГ 2. логин
+GET {{auth_url}}/auth/login?username=e2e_user&password=e2epassword123
+
+### ШАГ 3. проверяем профиль
+GET {{user_url}}/api/account-info/{{account_id}}
+Authorization: Bearer {{token}}
+
+### ШАГ 4. создаём тег
+POST {{task_url}}/api/tags
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name": "e2e-test",
+  "description": "Тег для e2e теста",
+  "color": "#8b5cf6",
+  "accountId": "{{account_id}}"
+}
+
+### ШАГ 5. создаём задачу high с тегом
+POST {{task_url}}/api/tasks
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "E2E тестовая задача",
+  "description": "Создана в рамках сквозного теста",
+  "status": "CREATED",
+  "priority": "HIGH",
+  "accountId": "{{account_id}}",
+  "dueDate": "2026-06-01T12:00:00Z",
+  "tagIds": ["{{tag_id}}"]
+}
+
+### ШАГ 6. ищем задачи — получаем task_id
+POST {{task_url}}/api/tasks/search
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "userId": "{{account_id}}",
+  "sortBy": ["createdAt"]
+}
+
+### ШАГ 7. ставим напоминание
+POST {{task_url}}/api/reminders
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "taskId": "{{task_id}}",
+  "reminderDate": "2026-05-31T09:00:00Z"
+}
+
+### ШАГ 8. запускаем ai-приоритизацию
+POST {{ai_url}}/api/ai/prioritize
+Content-Type: application/json
+
+{
+  "accountId": "{{account_id}}",
+  "tasks": [
+    {
+      "id": "{{task_id}}",
+      "title": "E2E тестовая задача",
+      "description": "Создана в рамках сквозного теста",
+      "priority": "HIGH",
+      "status": "CREATED",
+      "dueDate": "2026-06-01T12:00:00Z"
+    }
+  ]
+}
+
+### ШАГ 9. начинаем задачу (created - processing)
+POST {{task_url}}/api/tasks/{{task_id}}/start
+Authorization: Bearer {{token}}
+
+### ШАГ 10. завершаем задачу
+POST {{task_url}}/api/tasks/{{task_id}}/complete
+Authorization: Bearer {{token}}
+
+### ШАГ 11. проверяем что xp начислен
+GET {{user_url}}/api/account-info/{{account_id}}
+Authorization: Bearer {{token}}
+
+### ШАГ 12. проверяем уведомления
+GET {{notification_url}}/api/notifications/{{account_id}}
+
+### ШАГ 13. проверяем топ пользователей
+GET {{user_url}}/api/account-info/top
+Authorization: Bearer {{token}}
+
+### ШАГ 14. удаляем тестовую задачу
+DELETE {{task_url}}/api/tasks/{{task_id}}
+Authorization: Bearer {{token}}
+
+### ШАГ 15. удаляем тестовый тег
+DELETE {{task_url}}/api/tags/{{tag_id}}
+Authorization: Bearer {{token}}

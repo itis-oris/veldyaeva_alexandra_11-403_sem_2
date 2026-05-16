@@ -7,31 +7,32 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.Instant;
 import java.util.UUID;
 
-@Schema(description = "Task summary for the weekly view (tags excluded)")
+@Schema(description = "Сокращённое представление задачи для недельного отображения (без тегов)")
 public record TaskWeeklyResponse(
 
-        @Schema(description = "Task ID")
+        @Schema(description = "Уникальный идентификатор задачи")
         UUID id,
 
-        @Schema(description = "Task title")
+        @Schema(description = "Название задачи", example = "Написать модульные тесты")
         String title,
 
-        @Schema(description = "Task description")
+        @Schema(description = "Описание задачи", example = "Покрыть сервисный слой тестами JUnit 5")
         String description,
 
-        @Schema(description = "Task status")
+        @Schema(description = "Текущий статус задачи", example = "IN_PROGRESS")
         TaskStatus status,
 
-        @Schema(description = "Task priority")
+        @Schema(description = "Приоритет задачи", example = "HIGH")
         Priority priority,
 
-        @Schema(description = "Account (user) ID")
+        @Schema(description = "ID аккаунта")
         UUID accountId,
 
-        @Schema(description = "Created at timestamp")
+        @Schema(description = "Время создания задачи", example = "2026-05-16T10:15:30Z")
         Instant createdAt,
 
-        @Schema(description = "Due date")
+        @Schema(description = "Срок выполнения задачи", example = "2026-06-01T23:59:00Z")
         Instant dueDate
 
-) {}
+) {
+}

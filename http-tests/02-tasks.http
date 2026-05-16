@@ -1,0 +1,155 @@
+
+### 1. создать задачу — high приоритет с дедлайном
+POST {{task_url}}/api/tasks
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Написать отчёт по семестровой",
+  "description": "Оформить пояснительную записку",
+  "status": "CREATED",
+  "priority": "HIGH",
+  "accountId": "{{account_id}}",
+  "dueDate": "2026-06-01T18:00:00Z",
+  "tagIds": []
+}
+
+### 2. создать задачу — middle приоритет без дедлайна
+POST {{task_url}}/api/tasks
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Подготовить презентацию",
+  "description": "Сделать слайды для защиты",
+  "status": "CREATED",
+  "priority": "MIDDLE",
+  "accountId": "{{account_id}}",
+  "tagIds": []
+}
+
+### 3. создать задачу — low приоритет
+POST {{task_url}}/api/tasks
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Разобрать рабочий стол",
+  "description": null,
+  "status": "CREATED",
+  "priority": "LOW",
+  "accountId": "{{account_id}}",
+  "dueDate": "2026-07-01T10:00:00Z",
+  "tagIds": []
+}
+
+### 4. создать задачу пустой title (400)
+POST {{task_url}}/api/tasks
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "",
+  "priority": "HIGH",
+  "accountId": "{{account_id}}"
+}
+
+### 5. создать задачу без accountId (400)
+POST {{task_url}}/api/tasks
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Тест без аккаунта",
+  "priority": "LOW"
+}
+
+### 6. Поиск задач — все задачи пользователя
+POST {{task_url}}/api/tasks/search
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "userId": "{{account_id}}",
+  "sortBy": ["dueDate", "priority"]
+}
+
+### 7. поиск задач — фильтр по статусу created
+POST {{task_url}}/api/tasks/search
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "userId": "{{account_id}}",
+  "status": "CREATED",
+  "sortBy": ["priority"]
+}
+
+### 8. поиск задач — фильтр по приоритету high
+POST {{task_url}}/api/tasks/search
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "userId": "{{account_id}}",
+  "priority": "HIGH",
+  "sortBy": ["dueDate"]
+}
+
+### 9. поиск задач — фильтр по тегу
+POST {{task_url}}/api/tasks/search
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "userId": "{{account_id}}",
+  "tagName": "work",
+  "sortBy": ["createdAt"]
+}
+
+### 10. обновить задачу
+PUT {{task_url}}/api/tasks
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "id": "{{task_id}}",
+  "title": "Обновлённое название задачи",
+  "description": "Обновлённое описание",
+  "status": "PROCESSING",
+  "priority": "HIGH",
+  "accountId": "{{account_id}}",
+  "dueDate": "2026-06-15T12:00:00Z",
+  "tagIds": []
+}
+
+### 11. обновить задачу без id (404)
+PUT {{task_url}}/api/tasks
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "title": "Без ID",
+  "priority": "LOW",
+  "accountId": "{{account_id}}"
+}
+
+### 12. начать задачу (createdd > processing)
+POST {{task_url}}/api/tasks/{{task_id}}/start
+Authorization: Bearer {{token}}
+
+### 13. завершить задачу (completed)
+POST {{task_url}}/api/tasks/{{task_id}}/complete
+Authorization: Bearer {{token}}
+
+### 14.получить задачи за неделю
+GET {{task_url}}/api/tasks/weekly/{{account_id}}
+Authorization: Bearer {{token}}
+
+### 15. удалить задачу
+DELETE {{task_url}}/api/tasks/{{task_id}}
+Authorization: Bearer {{token}}
+
+### 16. удалить несуществующую задачу (404) "task not found: 00000000-0000-0000-0000-000000000000",
+DELETE {{task_url}}/api/tasks/00000000-0000-0000-0000-000000000000
+Authorization: Bearer {{token}}

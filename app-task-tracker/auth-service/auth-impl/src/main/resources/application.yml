@@ -12,9 +12,9 @@ spring:
 
   springdoc:
     api-docs:
-      enabled: false
+      enabled: true
     swagger-ui:
-      enabled: false
+      enabled: true
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: ${DB_USERNAME:postgres}
@@ -54,12 +54,12 @@ jwt:
   secret: ${JWT_ACCESS_SECRET:very-long-secret-key-min-64-chars-for-hs512-algorithm-replace-in-prod-123456}
   expiration:
     access:
-      mills: ${JWT_ACCESS_EXPIRATION_MS:900000}  # 15?
+      mills: ${JWT_ACCESS_EXPIRATION_MS:900000}
 
   token:
     secret: ${JWT_ACCESS_SECRET:very-long-secret-key-min-64-chars-for-hs512-algorithm-replace-in-prod-123456}
     expires:
-      at: ${JWT_REFRESH_EXPIRATION_MS:604800000}  # 7?
+      at: ${JWT_REFRESH_EXPIRATION_MS:604800000}
 
 server:
   port: 8081

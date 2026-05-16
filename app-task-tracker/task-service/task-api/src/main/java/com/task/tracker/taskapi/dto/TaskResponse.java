@@ -1,58 +1,52 @@
 package com.task.tracker.taskapi.dto;
+
 import com.task.tracker.commonlib.dto.Priority;
 import com.task.tracker.commonlib.dto.TaskStatus;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 import java.time.Instant;
 import java.util.Set;
 import java.util.UUID;
 
-@Schema(description = "Task response DTO")
+@Schema(description = "DTO ответа задачи")
 public record TaskResponse(
 
-        @Schema(description = "Task ID")
+        @Schema(description = "ID задачи")
         UUID id,
 
-        @NotBlank
-        @Size(max = 255)
-        @Schema(description = "Task title", example = "Write unit tests")
+        @Schema(description = "Заголовок задачи", example = "Написать unit-тесты")
         String title,
 
-        @Size(max = 2000)
-        @Schema(description = "Task description",
-                example = "Cover service layer with JUnit 5 tests")
+        @Schema(
+                description = "Описание задачи",
+                example = "Покрыть сервисный слой тестами JUnit 5"
+        )
         String description,
 
-        @NotNull
-        @Schema(description = "Task status")
+        @Schema(description = "Статус задачи", example = "IN_PROGRESS")
         TaskStatus status,
 
-        @NotNull
-        @Schema(description = "Task priority")
+        @Schema(description = "Приоритет задачи", example = "HIGH")
         Priority priority,
 
-        @NotNull
-        @Schema(description = "Account ID")
+        @Schema(description = "ID аккаунта (пользователя)")
         UUID accountId,
 
-        @Schema(description = "Task creation timestamp")
+        @Schema(description = "Время создания задачи")
         Instant createdAt,
 
-        @Schema(description = "Task completion timestamp")
+        @Schema(description = "Время завершения задачи")
         Instant completedAt,
 
-        @Schema(description = "Task last update timestamp")
+        @Schema(description = "Время последнего обновления задачи")
         Instant updatedAt,
 
-        @Schema(description = "Task due date")
+        @Schema(description = "Срок выполнения задачи")
         Instant dueDate,
 
         @ArraySchema(
-                schema = @Schema(description = "Associated tag IDs")
+                schema = @Schema(description = "ID связанных тегов")
         )
         Set<UUID> tagIds
 
