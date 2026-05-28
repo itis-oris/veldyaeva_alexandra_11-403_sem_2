@@ -21,7 +21,7 @@ import java.io.IOException;
 public class AiClient {
 
     private static final String ENDPOINT = "/openai/v1/chat/completions";
-    private static final MediaType JSON   = MediaType.get("application/json; charset=utf-8");
+    private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     private final OkHttpClient httpClient;
     private final ObjectMapper objectMapper;
