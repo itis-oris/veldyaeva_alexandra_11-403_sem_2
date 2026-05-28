@@ -24,11 +24,11 @@ public class AiClient {
         List<Map<String, Object>> tasks = raw.stream()
                 .filter(t -> !"COMPLETED".equals(t.get("status")))
                 .map(t -> Map.<String, Object>of(
-                        "id",          String.valueOf(t.getOrDefault("id", UUID.randomUUID())),
-                        "title",       String.valueOf(t.getOrDefault("title", "")),
+                        "id", String.valueOf(t.getOrDefault("id", UUID.randomUUID())),
+                        "title", String.valueOf(t.getOrDefault("title", "")),
                         "description", String.valueOf(t.getOrDefault("description", "")),
-                        "priority",    String.valueOf(t.getOrDefault("priority", "MIDDLE")),
-                        "status",      String.valueOf(t.getOrDefault("status",   "CREATED"))
+                        "priority", String.valueOf(t.getOrDefault("priority", "MIDDLE")),
+                        "status", String.valueOf(t.getOrDefault("status",   "CREATED"))
                 )).toList();
 
         Map<String, Object> body = Map.of("accountId", accountId, "tasks", tasks);
