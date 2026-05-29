@@ -82,7 +82,11 @@ public class TaskClient {
             body.put("tagIds", ids);
         }
         log.info("POST /api/tasks/create: {}", body);
-        restTemplate.exchange(serviceProperties.getTaskUrl() + "/api/tasks", HttpMethod.POST, entity(body, token), Void.class);
+        restTemplate.exchange(serviceProperties.getTaskUrl() + "/api/tasks",
+                HttpMethod.POST,
+                entity(body, token),
+                Void.class
+        );
     }
 
     public void update(String token, TaskForm f) {
@@ -94,6 +98,7 @@ public class TaskClient {
         body.put("priority", f.getPriority());
         body.put("accountId", f.getAccountId());
         String due = toInstant(f.getDueDate());
+
         if (due != null) {
             body.put("dueDate", due);
         }
@@ -104,7 +109,11 @@ public class TaskClient {
         } else {
             body.put("tagIds", List.of());
         }
-        restTemplate.exchange(serviceProperties.getTaskUrl() + "/api/tasks", HttpMethod.PUT, entity(body, token), Void.class);
+        restTemplate.exchange(serviceProperties.getTaskUrl() + "/api/tasks",
+                HttpMethod.PUT,
+                entity(body, token),
+                Void.class
+        );
     }
 
     public void delete(String token, UUID id) {
@@ -142,7 +151,11 @@ public class TaskClient {
         body.put("description", desc  != null ? desc  : "");
         body.put("color", color != null ? color : "#94a3b8");
         body.put("accountId", accountId);
-        restTemplate.exchange(serviceProperties.getTaskUrl() + "/api/tags", HttpMethod.POST, entity(body, token), Void.class);
+        restTemplate.exchange(serviceProperties.getTaskUrl() + "/api/tags",
+                HttpMethod.POST,
+                entity(body, token),
+                Void.class
+        );
     }
 
     public void updateTag(String token, UUID id, String name, String desc, String color) {
@@ -151,7 +164,11 @@ public class TaskClient {
                 "description",desc  != null ? desc  : "",
                 "color",color != null ? color : "#94a3b8"
         );
-        restTemplate.exchange(serviceProperties.getTaskUrl() + "/api/tags", HttpMethod.PUT, entity(body, token), Void.class);
+        restTemplate.exchange(serviceProperties.getTaskUrl() + "/api/tags",
+                HttpMethod.PUT,
+                entity(body, token),
+                Void.class
+        );
     }
 
     public void deleteTag(String token, UUID id) {

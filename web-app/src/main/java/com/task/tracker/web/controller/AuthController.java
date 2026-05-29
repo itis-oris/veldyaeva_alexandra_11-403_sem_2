@@ -32,17 +32,17 @@ public class AuthController {
     }
 
     @GetMapping("/login")
-    public String loginPage(Model m, HttpSession session) {
+    public String loginPage(Model model, HttpSession session) {
         if (sessionUtils.ok(session)){
             return "redirect:/tasks";
         }
-        m.addAttribute("loginForm", new LoginForm());
+        model.addAttribute("loginForm", new LoginForm());
         return "auth/login";
     }
 
     @PostMapping("/login")
     public String login(@Valid @ModelAttribute LoginForm form, BindingResult br,
-                        HttpSession session, Model m) {
+                        HttpSession session, Model model) {
         if (br.hasErrors()) {
             return "auth/login";
         }
@@ -65,14 +65,14 @@ public class AuthController {
 
             return "redirect:/tasks";
         } catch (Exception e) {
-            m.addAttribute("error", e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "auth/login";
         }
     }
 
     @GetMapping("/register")
-    public String registerPage(Model m) {
-        m.addAttribute("registerForm", new RegisterForm());
+    public String registerPage(Model model) {
+        model.addAttribute("registerForm", new RegisterForm());
         return "auth/register";
     }
 

@@ -42,7 +42,9 @@ public class NotificationClient {
     public void markAsRead(String token, UUID accountId, UUID notificationId) {
         restTemplate.exchange(
                 serviceProperties.getNotificationUrl() + "/api/notifications/send/" + accountId + "/" + notificationId,
-                HttpMethod.GET, new HttpEntity<>(header(token)),
+                HttpMethod.GET,
+                new HttpEntity<>(header(token)
+                ),
                 Void.class);
     }
 }
