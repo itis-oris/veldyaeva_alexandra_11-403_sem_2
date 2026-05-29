@@ -46,7 +46,7 @@ public class RefreshTokenRepository {
 
     public void save(String tokenHash, RefreshToken refreshToken) {
         String key = String.format(TOKEN_KEY, tokenHash);
-        String sessionKey = String.format(SESSION_KEY, tokenHash);
+        String sessionKey = SESSION_KEY.formatted(refreshToken.getAccountId());
         log.info(String.format("Removed refresh token save for key: %s", key));
 
         redisTemplate.opsForValue().set(
@@ -104,7 +104,7 @@ public class RefreshTokenRepository {
         }
 
         for (String tokenHash : tokenHashSet) {
-            String key = String.format(TOKEN_KEY, accountId);
+            String key = TOKEN_KEY.formatted(tokenHash);
 
             RefreshToken refreshToken = redisTemplate.opsForValue().get(key);
 

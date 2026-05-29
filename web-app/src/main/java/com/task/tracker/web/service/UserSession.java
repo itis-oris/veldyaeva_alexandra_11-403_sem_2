@@ -9,12 +9,15 @@ import java.util.UUID;
 @Data
 public class UserSession implements Serializable {
     private String accessToken;
+    private String refreshToken;
     private UUID accountId;
     private String username;
     private String role;
 
+    private long validatedAt;
+
     public String bearer() {
-        return "Bearer " + accessToken;
+        return accessToken;
     }
 
     public boolean loggedIn() {

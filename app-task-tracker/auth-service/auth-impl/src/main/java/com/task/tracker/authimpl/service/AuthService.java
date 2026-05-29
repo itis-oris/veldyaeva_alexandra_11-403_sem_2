@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,20 +38,12 @@ public class AuthService {
     @Transactional
     public TokenCouple login(String username, String password) {
         Account account = authenticatedService.authenticate(username, password);
-
         accountService.isActive(account);
 
         TokenCouple couple = jwtService.generateTokenCouple(account);
+        saveRefreshToken(couple.refreshToken(), account.getId());
 
-        log.info("Account login: {}", account.getId());
-
-        String tokenHash = DigestUtils.sha256Hex(couple.refreshToken());
-        RefreshToken refreshToken = RefreshToken.builder()
-                .accountId(account.getId())
-                .createdAt(Instant.now())
-                .build();
-
-        jwtRefreshTokenProvider.save(tokenHash, refreshToken);
+        log.info("Account login | accountId={}", account.getId());
         return couple;
     }
 
@@ -60,7 +53,11 @@ public class AuthService {
         try {
             Account account = accountService.findAccountById(refreshToken.getAccountId());
             accountService.isActive(account);
-            return jwtService.generateTokenCouple(account);
+
+            TokenCouple couple = jwtService.generateTokenCouple(account);
+
+            saveRefreshToken(couple.refreshToken(), account.getId());
+            return couple;
         } catch (AccountNotFoundException e) {
             log.warn("Account not found exception | accountId={}", refreshToken.getAccountId());
             throw new InvalidSessionException();
@@ -108,20 +105,13 @@ public class AuthService {
         jwtService.invalidateRefreshToken(requestRefreshToken);
     }
 
-    @Transactional
-    public UpdateResponse updateRole(UpdateRequest updateRequest) {
-        Account account = accountService.updateAddRole(updateRequest.id(), updateRequest.role().name());
-
-        log.info("Account registered | accountId={}", account.getId());
-
-        Set<Role> roles = account.getRoles().stream()
-                .map(r -> Role.valueOf(r.name()))
-                .collect(Collectors.toSet());
-
-        return new UpdateResponse(
-                account.getId(),
-                account.getUsername(),
-                roles
-        );
+    private void saveRefreshToken(String rawRefreshToken, UUID accountId) {
+        String tokenHash = DigestUtils.sha256Hex(rawRefreshToken);
+        RefreshToken refreshToken = RefreshToken.builder()
+                .accountId(accountId)
+                .createdAt(Instant.now())
+                .build();
+        jwtRefreshTokenProvider.save(tokenHash, refreshToken);
     }
+
 }

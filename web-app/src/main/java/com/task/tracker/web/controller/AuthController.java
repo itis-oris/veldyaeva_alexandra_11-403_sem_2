@@ -2,8 +2,10 @@ package com.task.tracker.web.controller;
 
 
 import com.task.tracker.web.client.AuthClient;
+import com.task.tracker.web.dto.Identity;
 import com.task.tracker.web.dto.LoginForm;
 import com.task.tracker.web.dto.RegisterForm;
+import com.task.tracker.web.dto.TokenPair;
 import com.task.tracker.web.service.UserSession;
 import com.task.tracker.web.util.SessionUtils;
 import jakarta.servlet.http.HttpSession;
@@ -16,7 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
-@Controller @RequiredArgsConstructor
+@Controller
+@RequiredArgsConstructor
 public class AuthController {
 
     private final SessionUtils sessionUtils;
@@ -44,13 +47,22 @@ public class AuthController {
             return "auth/login";
         }
         try {
-            String token = authClient.login(form);
+            TokenPair pair = authClient.login(form);
+
+            Identity identity = authClient.validate(pair.accessToken());
+            if (identity == null) {
+                throw new RuntimeException("Не удалось подтвердить токен");
+            }
+
             UserSession us = new UserSession();
-            us.setAccessToken(token);
-            us.setAccountId(sessionUtils.extractId(token));
-            us.setUsername(sessionUtils.extractUsername(token));
-            us.setRole(sessionUtils.extractRole(token));
+            us.setAccessToken(pair.accessToken());
+            us.setRefreshToken(pair.refreshToken());
+            us.setAccountId(identity.id());
+            us.setUsername(identity.username());
+            us.setRole(identity.role());
+            us.setValidatedAt(System.currentTimeMillis());
             sessionUtils.save(session, us);
+
             return "redirect:/tasks";
         } catch (Exception e) {
             m.addAttribute("error", e.getMessage());
@@ -65,8 +77,10 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String register(@Valid @ModelAttribute RegisterForm form, BindingResult br,
-                           Model m, RedirectAttributes flash) {
+    public String register(@Valid @ModelAttribute RegisterForm form,
+                           BindingResult br,
+                           Model m,
+                           RedirectAttributes flash) {
         if (br.hasErrors()) {
             return "auth/register";
         }

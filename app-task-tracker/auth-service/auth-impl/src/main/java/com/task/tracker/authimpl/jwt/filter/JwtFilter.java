@@ -36,10 +36,7 @@ public class JwtFilter extends OncePerRequestFilter {
             String path = request.getRequestURI();
             if(path.startsWith("/swagger-ui")
                     || path.startsWith("/v3/api-docs")
-                    || path.startsWith("/webjars")
-                    || path.equals("/auth/login")
-                    || path.equals("/auth/register")
-                    || path.equals("/auth/refresh")) {
+                    || path.startsWith("/webjars")) {
                 filterChain.doFilter(request, response);
 
                 return;
@@ -81,36 +78,44 @@ public class JwtFilter extends OncePerRequestFilter {
 
             log.error("JWT authentication error: {}", e.getMessage());
 
-            SecurityContextHolder.clearContext();
-
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-
-            response.getWriter().write("""
-                {
-                  "error": "Unauthorized",
-                  "message": "%s"
-                }
-                """.formatted(e.getMessage()));
+            writeUnauthorized(response, e);
 
         } catch (Exception e) {
 
             log.error("Unexpected authentication error", e);
 
-            SecurityContextHolder.clearContext();
-
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-
-            response.getWriter().write("""
-                {
-                  "error": "Unauthorized",
-                  "message": "Authentication failed"
-                }
-                """);
+            writeUnauthorized(response);
         }
+    }
+
+    private void writeUnauthorized(HttpServletResponse response) throws IOException {
+        SecurityContextHolder.clearContext();
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        response.getWriter().write("""
+            {
+              "error": "Unauthorized",
+              "message": "Authentication failed"
+            }
+            """);
+    }
+
+    private void writeUnauthorized(HttpServletResponse response, AuthenticationHeaderException e) throws IOException {
+        SecurityContextHolder.clearContext();
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        response.getWriter().write("""
+            {
+              "error": "Unauthorized",
+              "message": "%s"
+            }
+            """.formatted(e.getMessage()));
     }
 
     private String getTokenFromValidatedAuthorizationHeader(String authorizationHeader)

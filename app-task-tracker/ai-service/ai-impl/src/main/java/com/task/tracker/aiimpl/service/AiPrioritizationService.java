@@ -131,7 +131,6 @@ public class AiPrioritizationService {
             return new AiPrioritizationResponse(requestId, recommendations, generalAdvice, inputTokens, outputTokens);
 
         } catch (Exception e) {
-            log.error("Не удалось распарсить JSON от Claude | text={}", rawText);
             throw new AnthropicApiException("Claude вернул некорректный JSON: " + e.getMessage());
         }
     }
